@@ -7,6 +7,7 @@ import ContactSearch from "~/components/Contact/ContactSearch"
 import ContactAction from "~/components/Contact/ContactAction"
 import FriendPopup from '~/components/Contact/FriendPopup';
 import CreateGroupPopup from "~/components/Contact/CreateGroupPopup"
+import ContactList from "~/components/ContactList/ContactList"
 
 import AddUserIcon from "../resources/icon/add-user-icon.svg"
 import AddUserIconHover from "../resources/icon/add-user-icon-hover.svg"
@@ -15,6 +16,7 @@ import AddGroupIconHover from "../resources/icon/add-group-icon-hover.svg"
 
 export default function Homepage() {
     const [popupAction, setPopupAction] = useState<"user" | "group" | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     return (
         <div className="Homepage flex flex-row h-screen">
@@ -27,7 +29,7 @@ export default function Homepage() {
 
             <div className="contact flex flex-col !p-5 w-[25%] h-[100%] border-l-3 border-[#EFF3F6] rounded-tl-lg rounded-bl-lg">
                 <div className='contact-header w-full flex flex-row'>
-                    <ContactSearch />
+                    <ContactSearch value={searchQuery} onChange={setSearchQuery}/>
                     <div className="contact-action w-[30%] flex flex-row items-center gap-2 mx-1">
                         {/* TẠO NÚT HIỂN THỊ POPUP  */}
                         <ContactAction icon={AddUserIcon} iconHover={AddUserIconHover} onClick={() => setPopupAction("user")} />
@@ -43,9 +45,8 @@ export default function Homepage() {
                     </div>
                 </div>
 
-                <div className='contact-body'>
-                    <div className='contact-filter'></div>
-                    <div className="contact-list"></div>
+                <div className='contact-body flex-1 overflow-hidden'>
+                    <ContactList searchQuery={searchQuery}/>
                 </div>
             </div>
 
