@@ -1,0 +1,42 @@
+.ContactSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+    width: 70%;
+    height: 40px;
+    overflow: hidden;
+    background: #EFF3F6;
+}
+
+.ContactSearch img {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+.ContactSearch input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    outline: none;
+    border: none;
+    padding: 6px;
+    color: #010101;
+    font-size: 16px;
+}
+
+.ContactAction {
+    transition: 0.15s ease;
+    height: 100%;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.ContactAction:hover {
+    background: #E0F4F0;
+}
