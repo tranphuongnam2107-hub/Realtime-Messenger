@@ -8,6 +8,7 @@ import ContactAction from "~/components/Contact/ContactAction"
 import FriendPopup from '~/components/Contact/FriendPopup';
 import CreateGroupPopup from "~/components/Contact/CreateGroupPopup"
 import ContactList from "~/components/ContactList/ContactList"
+import MainChat from "~/components/MainChat/MainChat"
 
 import AddUserIcon from "../resources/icon/add-user-icon.svg"
 import AddUserIconHover from "../resources/icon/add-user-icon-hover.svg"
@@ -27,10 +28,11 @@ export default function Homepage() {
                 <Avatar />
             </div>
 
-            <div className="contact flex flex-col !p-5 w-[25%] h-[100%] border-l-3 border-[#EFF3F6] rounded-tl-lg rounded-bl-lg">
+            <div className="contact flex flex-col !py-5 !px-3 w-[20%] h-[100%] border-l-3 border-[#EFF3F6] rounded-tl-lg rounded-bl-lg">
                 <div className='contact-header w-full flex flex-row'>
                     <ContactSearch value={searchQuery} onChange={setSearchQuery}/>
-                    <div className="contact-action w-[30%] flex flex-row items-center gap-2 mx-1">
+
+                    <div className="contact-action w-[30%] flex flex-row items-center justify-end gap-2 mx-1">
                         {/* TẠO NÚT HIỂN THỊ POPUP  */}
                         <ContactAction icon={AddUserIcon} iconHover={AddUserIconHover} onClick={() => setPopupAction("user")} />
                         <ContactAction icon={AddGroupIcon} iconHover={AddGroupIconHover} onClick={() => setPopupAction("group")} />
@@ -50,9 +52,11 @@ export default function Homepage() {
                 </div>
             </div>
 
-            <div className="main-chat"></div>
+            <div className="main-chat w-[50%] bg-[#EDF0F6]">
+                <MainChat />
+            </div>
 
-            <div className="information"></div>
+            <div className="information flex-1 bg-red-500"></div>
         </div>
     );
 }
