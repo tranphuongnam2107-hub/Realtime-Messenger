@@ -15,7 +15,7 @@ const MenuNavbar = () => {
                 defaultIcon={Chaticon}
                 hoverIcon={ChaticonHover}
                 alt="Chat Page"
-                to="/chat"
+                to="/homepage"
             />
 
             <NavItem
