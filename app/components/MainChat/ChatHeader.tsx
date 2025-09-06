@@ -5,10 +5,11 @@ import { Search, Phone } from "lucide-react";
 interface ChatHeaderProps {
   avatar: string;
   name: string;
-  isGroup: boolean
+  isGroup: boolean;
+  onShowMembers: () => void;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ avatar, name, isGroup }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ avatar, name, isGroup, onShowMembers }) => {
   const [isSearching, setIsSearching] = useState(false);
 
   return (
@@ -20,7 +21,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ avatar, name, isGroup }) => {
         <div className='flex flex-col gap-0.5'>
           <span className="font-bold text-gray-800 text-lg">{name}</span>
           {isGroup && (
-            <span className='text-sm text-gray-400'>3 Member</span>
+            <span className='text-sm text-gray-400 cursor-pointer hover:underline'
+              onClick={onShowMembers}
+            >3 Member</span>
           )}
         </div>
         

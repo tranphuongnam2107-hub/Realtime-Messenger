@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Send, Smile, Image as ImageIcon } from "lucide-react";
+import "./MainChat.css"
 
 interface ChatInputProps {
     onSend: (message: string) => void;
@@ -19,6 +20,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, replyTo, onCancelReply })
         setText("");
     };
 
+    // Khi nhấn Enter
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault(); // Chặn xuống dòng
+            handleSend();     // Gửi tin nhắn
+        }
+        // Nếu Shift + Enter → không chặn, cho phép xuống dòng
+    };
+
     return (
         <div className="border border-gray-200 p-3 bg-white">
             {/* Reply Section */}
@@ -26,7 +36,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, replyTo, onCancelReply })
                 <div className="mb-2 p-2 bg-gray-100 rounded-lg flex justify-between items-center">
                     <div>
                         <p className="text-sm font-medium text-gray-700">
-                            Trả lời {replyTo.sender}
+                            Reply {replyTo.sender}
                         </p>
                         <p className="text-xs text-gray-500 truncate">{replyTo.text}</p>
                     </div>
@@ -48,12 +58,12 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, replyTo, onCancelReply })
 
             {/* Input + Send */}
             <div className="flex items-center gap-2 border border-gray-200 px-2 py-2 rounded-lg shadow-sm">
-                <input
-                    type="text"
-                    placeholder="Nhập tin nhắn..."
+                <textarea
+                    placeholder="Enter message..."
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    className="flex-1 px-4 outline-none"
+                    onKeyDown={handleKeyDown}
+                    className="flex-1 px-3 py-2 text-sm resize-none h-10 max-h-40 overflow-y-auto outline-none scrollbar-hide"
                 />
                 <button
                     onClick={handleSend}
