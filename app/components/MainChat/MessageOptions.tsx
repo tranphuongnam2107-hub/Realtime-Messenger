@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react'
 import { MoreVertical } from "lucide-react";
 
 interface MessageOptionsProps {
+    isMine: boolean;
     position?: "left" | "right";
     onReply: () => void;
     onDelete: () => void;
 }
 
-const MessageOptions: React.FC<MessageOptionsProps> = ({ position = "right", onReply, onDelete }) => {
+const MessageOptions: React.FC<MessageOptionsProps> = ({ isMine = false, position = "right", onReply, onDelete }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -42,12 +43,23 @@ const MessageOptions: React.FC<MessageOptionsProps> = ({ position = "right", onR
                     >
                         Reply
                     </button>
+
+                    {isMine && (
+                        <button
+                            onClick={onReply}
+                            className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+                        >
+                            Restore
+                        </button>
+                    )}
+
                     <button
                         onClick={onDelete}
                         className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-sm text-red-500"
                     >
-                        Delete
+                        Delete in my side
                     </button>
+
                 </div>
             )}
         </div>

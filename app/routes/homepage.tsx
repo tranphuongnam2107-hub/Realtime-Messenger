@@ -9,6 +9,7 @@ import FriendPopup from '~/components/Contact/FriendPopup';
 import CreateGroupPopup from "~/components/Contact/CreateGroupPopup"
 import ContactList from "~/components/ContactList/ContactList"
 import MainChat from "~/components/MainChat/MainChat"
+import Information from '~/components/Information/Information';
 
 import AddUserIcon from "../resources/icon/add-user-icon.svg"
 import AddUserIconHover from "../resources/icon/add-user-icon-hover.svg"
@@ -18,6 +19,8 @@ import AddGroupIconHover from "../resources/icon/add-group-icon-hover.svg"
 export default function Homepage() {
     const [popupAction, setPopupAction] = useState<"user" | "group" | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
+    // State điều khiển Information
+    const [infoView, setInfoView] = useState<"default" | "members" | "groups">("default");
 
     return (
         <div className="Homepage flex flex-row h-screen">
@@ -30,7 +33,7 @@ export default function Homepage() {
 
             <div className="contact flex flex-col !py-5 !px-3 w-[20%] h-[100%] border-l-3 border-[#EFF3F6] rounded-tl-lg rounded-bl-lg">
                 <div className='contact-header w-full flex flex-row'>
-                    <ContactSearch value={searchQuery} onChange={setSearchQuery}/>
+                    <ContactSearch value={searchQuery} onChange={setSearchQuery} />
 
                     <div className="contact-action w-[30%] flex flex-row items-center justify-end gap-2 mx-1">
                         {/* TẠO NÚT HIỂN THỊ POPUP  */}
@@ -48,15 +51,21 @@ export default function Homepage() {
                 </div>
 
                 <div className='contact-body flex-1 overflow-hidden'>
-                    <ContactList searchQuery={searchQuery}/>
+                    <ContactList searchQuery={searchQuery} />
                 </div>
             </div>
 
             <div className="main-chat w-[50%] bg-[#EDF0F6]">
-                <MainChat />
+                <MainChat onShowMembers={() => setInfoView("members")} />
             </div>
 
-            <div className="information flex-1 bg-red-500"></div>
+            <div className="information flex-1">
+                <Information isGroup={true} 
+                    view={infoView} 
+                    onBack={() => setInfoView("default")} 
+                    onViewGroups={() => setInfoView("groups")}
+                    onViewMembers={() => setInfoView("members")} />
+            </div>
         </div>
     );
 }
