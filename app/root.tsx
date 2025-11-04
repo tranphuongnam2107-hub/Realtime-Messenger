@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body suppressHydrationWarning={true}>
         {children}
         <ToastContainer
           position="top-right"
@@ -59,7 +59,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   return <>
     <Outlet />
-
   </>;
 }
 

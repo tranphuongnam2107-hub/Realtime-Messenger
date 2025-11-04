@@ -1,3 +1,4 @@
+import { useAuthGuard } from "~/hooks/useAuthGuard";
 import type { Route } from "./+types/home";
 import "../resources/styles/loginPageStyle.css"
 import LoginInput from "../components/Input/LoginInput"
@@ -6,6 +7,7 @@ import { authenService } from "~/services/authenService";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const MySwal = withReactContent(Swal);
 
@@ -17,21 +19,23 @@ export function meta({ }: Route.MetaArgs) {
 }
 
 export default function Home() {
+  useAuthGuard(false);
+
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
+
 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    await Swal.fire({
+    Swal.fire({
       title: "Logging in...",
       allowOutsideClick: false,
       showConfirmButton: false,
       didOpen: () => Swal.showLoading(),
-      timerProgressBar: true,
-      timer: 1000, 
     });
 
     try {
@@ -39,30 +43,49 @@ export default function Home() {
 
       Swal.close();
 
-      if (!data || !data.accessToken) {
-        Swal.close();
+      if (!data.dataRes || !data.dataRes.accessToken) {
         toast.error("Your identifier or password is incorrect.");
         return;
       }
 
       if (rememberMe) {
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        localStorage.setItem("accessToken", data.dataRes.accessToken);
+        localStorage.setItem("accountId", data.dataRes.accountId);
+        localStorage.setItem("refreshToken", data.dataRes.refreshToken);
       } else {
-        sessionStorage.setItem("accessToken", data.accessToken);
-        sessionStorage.setItem("refreshToken", data.refreshToken);
+        sessionStorage.setItem("accessToken", data.dataRes.accessToken);
+        sessionStorage.setItem("refreshToken", data.dataRes.refreshToken);
+        sessionStorage.setItem("accountId", data.dataRes.accountId);
       }
 
-      Swal.close();
       toast.success("Login successfully.");
-      setTimeout(() => {
-        window.location.href = "/homepage";
-      }, 1000);
-
+      navigate("/homepage");
     } catch (error: any) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.response.status);
       Swal.close();
-      toast.error("Login failed. Please check your credentials.");
+
+      if (error.response) {
+        const status = error.response.status;
+
+        if (status === 423) {
+          await Swal.fire({
+            icon: "warning",
+            title: "Your account is locked",
+            text: error.response.data?.message || "Please contact support.",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#24BAA1",
+          });
+          return;
+        }
+
+        if (status === 401) {
+          toast.error("Invalid username or password.");
+          return;
+        }
+      }
+
+      // 🔹 Lỗi khác (mạng, server sập, v.v.)
+      toast.error("Login failed. Please try again later.");
     }
   };
 
