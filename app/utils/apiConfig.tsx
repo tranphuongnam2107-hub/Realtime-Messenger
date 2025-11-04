@@ -4,6 +4,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 export const apiConfig = axios.create({
     baseURL: BASE_URL,
+    timeout: 50000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -33,14 +34,14 @@ apiConfig.interceptors.response.use(
             if (!refreshToken) {
                 // Không có refresh token → logout
                 localStorage.clear();
-                window.location.href = "/home";
+                window.location.href = "/";
                 return Promise.reject(error);
             }
 
             try {
                 // Gọi API refresh token
                 const res = await axios.post(`${BASE_URL}/authen/refresh-token`, { refreshToken });
-                const { accessToken, refreshToken: newRefreshToken } = res.data.data;
+                const { accessToken, refreshToken: newRefreshToken } = res.data.dataRes;
 
                 // Lưu lại token mới
                 localStorage.setItem("accessToken", accessToken);
@@ -52,7 +53,7 @@ apiConfig.interceptors.response.use(
             } catch (refreshError) {
                 // Refresh token hết hạn → logout
                 localStorage.clear();
-                window.location.href = "/home";
+                window.location.href = "/";
                 return Promise.reject(refreshError);
             }
         }

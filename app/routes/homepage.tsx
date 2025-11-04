@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useAuthGuard } from "~/hooks/useAuthGuard";
 import "../resources/styles/homepage.css"
 import Logo from '~/components/Logo/logo';
 import Avatar from '~/components/Logo/avatar'
@@ -22,6 +23,8 @@ export default function Homepage() {
     // State điều khiển Information
     const [infoView, setInfoView] = useState<"default" | "members" | "groups">("default");
 
+    useAuthGuard(true); 
+    
     return (
         <div className="Homepage flex flex-row h-screen">
 
